@@ -12,7 +12,7 @@ This is a PyTorch implementation of the <a href="https://arxiv.org/abs/2009.0799
 
 
 ### Requirements:
-* WebVision dataset
+* <a href="https://data.vision.ee.ethz.ch/cvl/webvision/download.html">WebVision dataset</a>
 * ImageNet dataset (for evaluation)
 * Python ≥ 3.6
 * PyTorch ≥ 1.4
@@ -35,12 +35,13 @@ To perform webly-supervised training of a ResNet-50 model on WebVision V1.0 usin
 
 
 ### Noise Cleaning
-<pre>python noise_cleaning.py --resume [pre-trained model path] --annotation pseudo_label.json
+<pre>python noise_cleaning.py --data [WebVision folder] --resume [pre-trained model path] --annotation pseudo_label.json
 </pre>
 
 
 ### Classifier Retraining on WebVision
-<pre>python classifier_retrain.py --resume [pre-trained model path] --annotation pseudo_label.json --exp-dir experiment/cRT
+<pre>python classifier_retrain.py --data [WebVision folder] \ 
+  --resume [pre-trained model path] --annotation pseudo_label.json --exp-dir experiment/cRT
 </pre>
 
 ### Fine-tuning on ImageNet (1% of labeled data)

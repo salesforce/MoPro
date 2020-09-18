@@ -1,12 +1,12 @@
 ## MoPro: Webly Supervised Learning with Momentum Prototypes (Salesforce Research)
 <img src="./img/blog.png" width="600">
 
-This is a PyTorch implementation of the <a href="https://arxiv.org/abs/2005.04966">MoPro paper</a> (<a href="https://arxiv.org/abs/2005.04966">Blog post</a>):
+This is a PyTorch implementation of the <a href="https://arxiv.org/abs/2009.07995">MoPro paper</a> (<a href="https://arxiv.org/abs/2005.2009.07995">Blog post</a>):
 <pre>
-@article{PCL,
-	title={Prototypical Contrastive Learning of Unsupervised Representations},
-	author={Junnan Li and Pan Zhou and Caiming Xiong and Richard Socher and Steven C.H. Hoi},
-	journal={arXiv preprint arXiv:2005.04966},
+@article{MoPro,
+	title={MoPro: Webly Supervised Learning with Momentum Prototypes},
+	author={Junnan Li and Caiming Xiong and Steven C.H. Hoi},
+	journal={arXiv preprint arXiv:2009.07995},
 	year={2020}
 }</pre>
 

@@ -32,11 +32,13 @@ import numpy as np
 parser = argparse.ArgumentParser(description='PyTorch WebVision Classifier Retraining')
 parser.add_argument('--data', default='../WebVision/dataset/',
                     help='path to WebVision dataset and ImageNet validation set')
+parser.add_argument('--imagenet', default='',
+                    help='path to ImageNet validation set')
 
 parser.add_argument('--annotation', default='./pseudo_label.json',
                     help='path to pseudo-label annotation')
 
-parser.add_argument('--exp_dir', default='experiment/cRT', type=str,
+parser.add_argument('--exp-dir', default='experiment/cRT', type=str,
                     help='experiment directory')
 
 parser.add_argument('-j', '--workers', default=32, type=int,
@@ -215,8 +217,8 @@ def main_worker(gpu, ngpus_per_node, args):
                                 weight_decay=args.weight_decay)
     
     # Data loading code
-    loader = dataloader.webvision_dataloader(batch_size=args.batch_size,num_workers=args.workers,\
-                                             root_dir=args.data,distributed=args.distributed,annotation=args.annotation)           
+    loader = dataloader.webvision_dataloader(batch_size=args.batch_size,num_workers=args.workers,root_dir=args.data,\
+                                             imagenet_dir=args.imagenet,distributed=args.distributed,annotation=args.annotation)           
     train_loader,test_loader,imagenet_loader = loader.run()   
     
     if args.gpu==0:

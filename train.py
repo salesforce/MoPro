@@ -30,9 +30,9 @@ import numpy as np
 
 parser = argparse.ArgumentParser(description='PyTorch WebVision Training')
 parser.add_argument('--data', default='../WebVision/dataset/',
-                    help='path to WebVision dataset and ImageNet validation set')
+                    help='path to WebVision dataset')
 
-parser.add_argument('--exp_dir', default='experiment/MoPro_V1', type=str,
+parser.add_argument('--exp-dir', default='experiment/MoPro_V1', type=str,
                     help='experiment directory')
 
 parser.add_argument('-a', '--arch', metavar='ARCH', default='resnet50',choices=['resnet50',])
@@ -231,7 +231,7 @@ def main_worker(gpu, ngpus_per_node, args):
     # Data loading code
     loader = dataloader.webvision_dataloader(batch_size=args.batch_size,num_workers=args.workers,\
                                              root_dir=args.data,num_class=args.num_class,distributed=args.distributed)           
-    train_loader,test_loader,_ = loader.run()   
+    train_loader,test_loader = loader.run()   
     
     if args.gpu==0:
         logger = tb_logger.Logger(logdir=os.path.join(args.exp_dir,'tensorboard'), flush_secs=2)

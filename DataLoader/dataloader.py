@@ -8,27 +8,6 @@ import os
 from PIL import ImageFile
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-
-    
-class imagenet_dataset(Dataset):
-    def __init__(self, root_dir, transform, num_class):
-        self.root = root_dir+'imagenet/val/'
-        self.transform = transform
-        self.val_data = []
-        for c in range(num_class):
-            imgs = os.listdir(self.root+str(c))
-            for img in imgs:
-                self.val_data.append([c,os.path.join(self.root,str(c),img)])                
-                
-    def __getitem__(self, index):
-        data = self.val_data[index]
-        target = data[0]
-        image = Image.open(data[1]).convert('RGB')   
-        img = self.transform(image) 
-        return img, target
-    
-    def __len__(self):
-        return len(self.val_data)
     
 
 class webvision_dataset(Dataset): 
@@ -127,18 +106,15 @@ class webvision_dataloader():
 
         train_dataset = webvision_dataset(root_dir=self.root_dir, transform=self.transform_train, mode="train", num_class=self.num_class, transform_strong = self.transform_strong)   
         test_dataset = webvision_dataset(root_dir=self.root_dir, transform=self.transform_test, mode='test', num_class=self.num_class) 
-        imagenet_val = imagenet_dataset(root_dir=self.root_dir, transform=self.transform_test, num_class=self.num_class)  
         
         if self.distributed:
             self.train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
             test_sampler = torch.utils.data.distributed.DistributedSampler(test_dataset,shuffle=False)
-            imagenet_sampler = torch.utils.data.distributed.DistributedSampler(imagenet_val,shuffle=False)
         else:
             self.train_sampler = None
             eval_sampler = None
             test_sampler = None
-            imagenet_sampler = None
-            
+
         train_loader = DataLoader(
             dataset=train_dataset, 
             batch_size=self.batch_size,
@@ -154,17 +130,7 @@ class webvision_dataloader():
             shuffle=False,
             num_workers=self.num_workers,
             pin_memory=True,
-            sampler=test_sampler)                              
-        
-        imagenet_loader = DataLoader(
-            dataset=imagenet_val, 
-            batch_size=self.batch_size,
-            shuffle=False,
-            num_workers=self.num_workers,
-            pin_memory=True,
-            sampler=imagenet_sampler)          
-
-        
-        return train_loader,test_loader,imagenet_loader     
-
+            sampler=test_sampler)                                     
+    
+        return train_loader,test_loader
     

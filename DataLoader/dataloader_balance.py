@@ -1,4 +1,5 @@
 from torch.utils.data import Dataset, DataLoader
+import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 import random
 import numpy as np
@@ -11,26 +12,6 @@ import json
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-    
-class imagenet_dataset(Dataset):
-    def __init__(self, root_dir, transform, num_class=1000):
-        self.root = root_dir+'imagenet/val/'
-        self.transform = transform
-        self.val_data = []
-        for c in range(num_class):
-            imgs = os.listdir(self.root+str(c))
-            for img in imgs:
-                self.val_data.append([c,os.path.join(self.root,str(c),img)])                
-                
-    def __getitem__(self, index):
-        data = self.val_data[index]
-        target = data[0]
-        image = Image.open(data[1]).convert('RGB')   
-        img = self.transform(image) 
-        return img, target
-    
-    def __len__(self):
-        return len(self.val_data)
 
 class webvision_dataset(Dataset): 
     def __init__(self, root_dir, annotation, transform, mode): 
@@ -100,13 +81,15 @@ class webvision_dataset(Dataset):
 
 
 class webvision_dataloader():  
-    def __init__(self, batch_size, annotation, num_workers, root_dir, distributed, crop_size=0.2):
+    def __init__(self, batch_size, annotation, num_workers, root_dir, imagenet_dir, distributed, crop_size=0.2):
 
         self.batch_size = batch_size
         self.annotation = annotation
         self.num_workers = num_workers
         self.root_dir = root_dir
+        self.imagenet_dir = imagenet_dir
         self.distributed = distributed
+        
         
         self.transform_train = transforms.Compose([
             transforms.RandomResizedCrop(224, scale=(crop_size, 1.0)),
@@ -125,8 +108,8 @@ class webvision_dataloader():
     def run(self):
 
         train_dataset = webvision_dataset(root_dir=self.root_dir, transform=self.transform_train, mode="train", annotation = self.annotation)   
-        test_dataset = webvision_dataset(root_dir=self.root_dir, transform=self.transform_test, mode='test', annotation = self.annotation) 
-        imagenet_val = imagenet_dataset(root_dir=self.root_dir, transform=self.transform_test)  
+        test_dataset = webvision_dataset(root_dir=self.root_dir, transform=self.transform_test, mode='test', annotation = self.annotation)   
+        imagenet_val = datasets.ImageFolder(os.path.join(self.imagenet_dir, 'val'), self.transform_test)
         
         if self.distributed:
             self.train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
@@ -154,14 +137,14 @@ class webvision_dataloader():
             num_workers=self.num_workers,
             pin_memory=True,
             sampler=test_sampler)                              
-        
+         
         imagenet_loader = DataLoader(
-            dataset=imagenet_val, 
-            batch_size=self.batch_size,
+            dataset=imagenet_val,
+            batch_size=self.batch_size, 
             shuffle=False,
-            num_workers=self.num_workers,
+            num_workers=self.num_workers, 
             pin_memory=True,
-            sampler=imagenet_sampler)          
+            sampler=imagenet_sampler)                    
 
         
         return train_loader,test_loader,imagenet_loader     

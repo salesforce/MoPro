@@ -31,7 +31,7 @@ import numpy as np
 
 parser = argparse.ArgumentParser(description='PyTorch WebVision Classifier Retraining')
 parser.add_argument('--data', default='../WebVision/dataset/',
-                    help='path to WebVision dataset and ImageNet validation set')
+                    help='path to WebVision dataset')
 parser.add_argument('--imagenet', default='',
                     help='path to ImageNet validation set')
 

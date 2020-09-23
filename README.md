@@ -41,7 +41,8 @@ To perform webly-supervised training of a ResNet-50 model on WebVision V1.0 usin
 
 ### Classifier Retraining on WebVision
 <pre>python classifier_retrain.py --data [WebVision folder] --imagenet [ImageNet folder]\ 
-  --resume [pre-trained model path] --annotation pseudo_label.json --exp-dir experiment/cRT
+  --resume [pre-trained model path] --annotation pseudo_label.json --exp-dir experiment/cRT\
+  --dist-url 'tcp://localhost:10001' --multiprocessing-distributed --world-size 1 --rank 0 
 </pre>
 
 ### Fine-tuning on ImageNet (1% of labeled data)

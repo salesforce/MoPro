@@ -135,7 +135,7 @@ class MoPro(nn.Module):
             
         if is_clean:
             # noise cleaning
-            soft_label = args.pseudo_w*F.softmax(output, dim=1) + (1-args.pseudo_w)*F.softmax(logits_proto, dim=1)
+            soft_label = args.alpha*F.softmax(output, dim=1) + (1-args.alpha)*F.softmax(logits_proto, dim=1)
             
             # keep ground truth label
             gt_score = soft_label[target>=0,target]

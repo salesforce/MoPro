@@ -1,13 +1,13 @@
 ## MoPro: Webly Supervised Learning with Momentum Prototypes (Salesforce Research)
 <img src="./img/blog.png" width="600">
 
-This is a PyTorch implementation of the <a href="https://arxiv.org/abs/2009.07995">MoPro paper</a> (<a href="https://blog.einstein.ai/mopro-webly-supervised-learning-with-momentum-prototypes/">Blog post</a>):
+This is a PyTorch implementation of the <a href="https://openreview.net/forum?id=0-EYBhgw80y">MoPro paper</a> (<a href="https://blog.einstein.ai/mopro-webly-supervised-learning-with-momentum-prototypes/">Blog post</a>):
 <pre>
 @article{MoPro,
 	title={MoPro: Webly Supervised Learning with Momentum Prototypes},
 	author={Junnan Li and Caiming Xiong and Steven C.H. Hoi},
-	journal={arXiv preprint arXiv:2009.07995},
-	year={2020}
+	journal={ICLR},
+	year={2021}
 }</pre>
 
 
